@@ -16,9 +16,6 @@ RUN pnpm install
 # Build the project
 RUN pnpm run build
 
-# Copy the hack directory to the container
-COPY hack ./
-
 # Set environment variables
 ENV HOST=0.0.0.0 PORT=3000 NODE_ENV=production LANG=C.UTF-8
 

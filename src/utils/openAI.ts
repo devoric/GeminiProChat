@@ -1,7 +1,12 @@
 import { GoogleGenerativeAI } from '@fuyun/generative-ai'
+import { config } from 'dotenv'
 
-const apiKey = (import.meta.env.GEMINI_API_KEY)
-const apiBaseUrl = (import.meta.env.API_BASE_URL)?.trim().replace(/\/$/, '')
+// Load environment variables from .env file
+config()
+
+// Retrieve the API key securely from environment variables
+const apiKey = process.env.GEMINI_API_KEY
+const apiBaseUrl = (process.env.API_BASE_URL)?.trim().replace(/\/$/, '')
 
 const genAI = apiBaseUrl
   ? new GoogleGenerativeAI(apiKey, apiBaseUrl)
@@ -16,7 +21,7 @@ export const startChatAndSendMessageStream = async(history: ChatMessage[], newMe
       parts: msg.parts.map(part => part.text).join(''), // Join parts into a single string
     })),
     generationConfig: {
-      maxOutputTokens: 8000,
+      maxOutputTokens: 512, // Reduced maxOutputTokens to a reasonable number
     },
     safetySettings: [
       {category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE'},
