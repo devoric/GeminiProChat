@@ -9,7 +9,8 @@ import netlify from '@astrojs/netlify/edge-functions'
 import disableBlocks from './plugins/disableBlocks'
 
 const envAdapter = () => {
-  switch (process.env.OUTPUT) {
+  const outputEnv = process.env.OUTPUT || 'server';
+  switch (outputEnv) {
     case 'vercel': return vercel()
     case 'netlify': return netlify()
     default: return node({ mode: 'standalone' })
@@ -62,8 +63,7 @@ export default defineConfig({
   adapter: envAdapter(),
   vite: {
     plugins: [
-      process.env.OUTPUT === 'vercel' && disableBlocks(),
-      process.env.OUTPUT === 'netlify' && disableBlocks(),
+      (outputEnv === 'vercel' || outputEnv === 'netlify') && disableBlocks(),
     ],
   },
 })
